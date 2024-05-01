@@ -1,0 +1,1 @@
+export const Symbols = ['diamond', 'circle', 'triangle', 'square', 'star', 'heart'];

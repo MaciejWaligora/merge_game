@@ -1,32 +1,31 @@
 import { Component, ReactNode, createRef } from "react";
 import * as PIXI from "pixijs"
 
+import { SymbolGenerator } from "../Lib/SymbolGenerator";
+
+SymbolGenerator.generateSumbols();
+
 export interface GameConfig{
-    width: number;
-    height: number;
+    pixiApp: PIXI.Application;
 }
 
-export class GameCanvas <TConfig extends GameConfig> extends Component{
+export class GameCanvas extends Component <GameConfig> {
 
     private _parentRef = createRef<HTMLDivElement>();
-    private _pixiApp!: PIXI.Application;
 
-    constructor(config: TConfig){
-        super(config);
-
-        this._pixiApp = new PIXI.Application({
-            width: config.width,
-            height: config.height
-        });
-        
-    }
 
     public componentDidMount(): void {
         this._loadView();
     }
 
+    public componentWillUnmount(): void {
+        this.props.pixiApp.destroy();
+    }
+
     private _loadView(){
-        this._parentRef.current?.appendChild(this._pixiApp.view as HTMLCanvasElement);
+        if (this._parentRef.current) {
+            this._parentRef.current.appendChild(this.props.pixiApp.view as HTMLCanvasElement);
+        }
     }
 
     public render(): ReactNode{
