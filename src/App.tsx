@@ -5,6 +5,8 @@ import { SymbolGenerator } from './Lib/SymbolGenerator';
 import { GridModel } from './Lib/Models/GridModel';
 import { AssetLoader } from './Lib/AssetLoader';
 import { GridView } from './Lib/Views/GridView';
+import { InputHandler } from './Lib/Handlers/InputHandler';
+import { Position } from './Lib/Models/TileModel';
 
 
 
@@ -27,7 +29,14 @@ const config = {
 const renderer = new PIXI.Application(config.display);
 const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
 const grid = new GridModel({symbols: symbolsForTheGame});
+const inputHandler = new InputHandler({renderer: renderer});
+
 let gridV:GridView;
+
+const onClick = (data: Position | undefined) =>{
+  console.log(data);
+}
+inputHandler.tileClickedSignal.addListener(onClick);
 
 AssetLoader.loadBackground(config.assets.background, renderer);
 AssetLoader.getTextures([config.assets.tile]).then((textures: PIXI.Texture[])=>{

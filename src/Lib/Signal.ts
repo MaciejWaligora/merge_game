@@ -1,8 +1,8 @@
-export class Signal {
+export class Signal<T>{
 
-    private _listeners: (()=>void) [] = [];
+    private _listeners: ((data?:T)=>void) [] = [];
 
-    public addListener(listener: ()=>void){
+    public addListener(listener: (data?:T)=>void){
         this._listeners.push(listener);
     }
 
@@ -11,9 +11,11 @@ export class Signal {
         this._listeners.splice(index, 1);
     }
 
-    public emit(){
+    public emit(data?: T){
         for(const listener of this._listeners){
-            listener();
+            if(data){
+                listener(data);
+            }
         }
     }
 

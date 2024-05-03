@@ -32,6 +32,7 @@ export abstract class View<Tconfig extends ViewConfig> {
         this._renderer.stage.removeChild(container);
     }
 
+
     public abstract update(): void;
 
 
