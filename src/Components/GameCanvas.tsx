@@ -1,9 +1,6 @@
 import { Component, ReactNode, createRef } from "react";
 import * as PIXI from "pixijs"
 
-import { SymbolGenerator } from "../Lib/SymbolGenerator";
-
-SymbolGenerator.generateSumbols();
 
 export interface GameConfig{
     pixiApp: PIXI.Application;

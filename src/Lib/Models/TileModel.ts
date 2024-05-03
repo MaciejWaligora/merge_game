@@ -1,5 +1,5 @@
 import { Model } from "./Model";
-import { Signal } from "./Signal";
+import { Signal } from "../Signal";
 
 export interface Position{
     x: number;
@@ -8,7 +8,7 @@ export interface Position{
 
 export interface TileModelConfig{
     position: Position;
-    symbol: Symbol;
+    symbol: string;
 }
 
 export interface TileData{
@@ -16,20 +16,13 @@ export interface TileData{
     isClicked: boolean;
 }
 
-export enum Symbol{
-    'diamond',
-    'circle',
-    'square',
-    'star',
-    'heart',
-    'triangle'
-}
+
 
 export class TileModel<Tconfig extends TileModelConfig> extends Model{
 
     private _exists: boolean = true;
     private _isClicked: boolean = false;
-    private _symbol: Symbol;
+    private _symbol: string;
     private _position: Position;
 
     public clickedSignal = new Signal();
@@ -51,6 +44,10 @@ export class TileModel<Tconfig extends TileModelConfig> extends Model{
 
     public getPosition(){
         return this._position;
+    }
+
+    public getSymbol(){
+        return this._symbol;
     }
 
 
