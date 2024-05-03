@@ -1,10 +1,12 @@
+type SymbolMapType = {
+    [key: string]: string;
+};
 
-
-export const SymbolMap = {
+export const SymbolMap: SymbolMapType = {
     diamond: "./diamond.png",
     circle: "./circle.png",
-    triangle: "./trangle.png",
-    square: "./sqaure.png",
+    triangle: "./triangle.png",
+    square: "./square.png",
     star: "./star.png",
     heart: "./heart.png"
 }

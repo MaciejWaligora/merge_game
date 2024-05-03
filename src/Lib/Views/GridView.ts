@@ -1,6 +1,8 @@
 import * as PIXI from 'pixijs'
 import { View, ViewConfig } from "./View";
 import { TileView } from './TileView';
+import { AssetLoader } from '../AssetLoader';
+import { SymbolMap } from '../Symbols';
 
 export interface GridViewConfig extends ViewConfig{
     tileTextures:{
@@ -42,16 +44,33 @@ export class GridView extends View<GridViewConfig>{
         const screenWidth = this._renderer.screen.width;
         const screenHeight = this._renderer.screen.height;
 
-       const containerWidth = this._container.width;
-       const containerHeight = this._container.height;
+        const containerWidth = this._container.width;
+        const containerHeight = this._container.height;
 
-       const containerX = (screenWidth - containerWidth)/2;
-       const containerY = (screenHeight - containerHeight)/2;
+        const containerX = (screenWidth - containerWidth)/2;
+        const containerY = (screenHeight - containerHeight)/2;
 
-       this._container.x = containerX;
-       this._container.y = containerY;
-
+        this._container.x = containerX;
+        this._container.y = containerY;
     }
+
+    
+    public async addSymbols(symbols: string[]){
+        const paths:string[] = [];
+        symbols.forEach((symbol)=>{
+            const symbolPath =  SymbolMap[symbol]
+            paths.push(symbolPath);
+        })
+            
+        const textures =  await AssetLoader.getTextures(paths);
+        const tileViews = this._tileViews
+        for(let i = 0; i < tileViews.length; i++){
+            const symbol = textures[i]
+            tileViews[i].addSymbol(symbol);
+        }
+    }
+
+
     public update(): void {
         
     }
