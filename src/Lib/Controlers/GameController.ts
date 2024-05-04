@@ -20,6 +20,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._inputHandler = new InputHandler();
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
+        this._modelController.tileDestroyedSignal.addListener(this.destroyTile, this);
     }
 
     public init(){
@@ -36,5 +37,9 @@ export class GameController<Tconfig extends GameControllerConfig>{
         if(data){
             this._viewController.updateView(data.index, data.state);
         }  
+    }
+
+    public destroyTile(index: number | undefined){
+        this._viewController.destroyTile(index);
     }
 }

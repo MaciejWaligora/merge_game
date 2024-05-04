@@ -1,4 +1,5 @@
 import { Signal } from "../Signal";
+import { TileView } from "../Views/TileView";
 import { Model } from "./Model";
 import {TileModel, TileModelConfig } from "./TileModel";
 
@@ -12,7 +13,9 @@ export class GridModel<Tconfig extends GridModelConfig> extends Model{
     private _size: number;
     private _symbols: string[];
     private _unique: Record<string, number> = {};
+    private _currentSelection: TileModel<TileModelConfig>[] = [];
     public tileClickedSignal = new Signal<{index: number, state: boolean}>();
+    public tileDestroyedSignal = new Signal<number>();
 
     constructor(config: Tconfig) {
         super();
@@ -30,6 +33,7 @@ export class GridModel<Tconfig extends GridModelConfig> extends Model{
             };
             const tile = new TileModel(tileConfig);
             tile.clickedSignal.addListener(this.onTileClicked, this);
+            tile.destroySignal.addListener(this.onTileDestroyed, this);
             this._tiles.push(tile);
         }
     }
@@ -38,17 +42,41 @@ export class GridModel<Tconfig extends GridModelConfig> extends Model{
         this.tileClickedSignal.emit(data);
     }
 
+    public onTileDestroyed(index: number | undefined){
+        this.tileDestroyedSignal.emit(index);
+    }
+
     public updateTile(index: number, exists: boolean, isClicked: boolean){
         this._tiles[index].update({exists: exists, isClicked: isClicked})
     }
 
+    public addSelection(index:number){
+        const tileModel = this._tiles[index];
+        this._currentSelection.push(tileModel);
+    }
 
+    public removeSelection(index:number){
+        this._currentSelection.splice(index,1);
+    }
+
+    public getCurrentSelection(){
+        return this._currentSelection;
+    }
     public getTileData(index: number){
         const data = {
             isClicked: this._tiles[index].isClicked(),
-            exists: this._tiles[index].exists()
+            exists: this._tiles[index].exists(),
+            symbol: this._tiles[index].getSymbol()
         }
         return data
+    }
+
+    public clearSelection(){
+        const currentSelection = this._currentSelection;
+        for(let selected of currentSelection){
+            selected.update({exists: true, isClicked: false});
+        }
+        this._currentSelection = [];
     }
 
     private countUniqueSymbols(){

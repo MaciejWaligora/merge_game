@@ -25,4 +25,8 @@ export class ViewController <Tconfig extends ViewControllerConfig>{
             view.unselect();
         }
     }
+
+    public destroyTile(index: number | undefined){
+        this._config.gridView.destroyTile(index);
+    }
 }

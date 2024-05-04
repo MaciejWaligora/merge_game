@@ -22,7 +22,7 @@ export class TileModel<Tconfig extends TileModelConfig> extends Model{
     private _index: number
 
     public clickedSignal = new Signal<{index: number, state: boolean}>();
-    public destroySignal = new Signal();
+    public destroySignal = new Signal<number>();
 
     constructor(config: Tconfig){
         super();
@@ -56,6 +56,8 @@ export class TileModel<Tconfig extends TileModelConfig> extends Model{
                 state: this._isClicked
             }
             this.clickedSignal.emit(data);
+        }else{
+            this.destroySignal.emit(this._index);
         }
     }
 
