@@ -3,6 +3,7 @@ import { View, ViewConfig } from "./View";
 import { TileView } from './TileView';
 import { AssetLoader } from '../AssetLoader';
 import { SymbolMap } from '../Symbols';
+import { Signal } from '../Signal';
 
 export interface GridViewConfig extends ViewConfig{
     tileTextures:{
@@ -17,10 +18,12 @@ export class GridView extends View<GridViewConfig>{
     private _config: GridViewConfig
     private _tileViews: TileView[] = [];
 
+    public tileClickedSignal = new Signal<number>();
+
     constructor(config: GridViewConfig){
         super(config);
         this._config = config;
-        this._renderer.stage.addChild(this._container);
+        this._renderer.stage.addChild(this);
         this._layoutGrid();
         this.centerGrid();
     }
@@ -30,13 +33,14 @@ export class GridView extends View<GridViewConfig>{
         const tileSpacingY = 10; 
 
         for(let i = 0; i < this._config.size; i++){
-            const tile = new TileView({...this._config.tileTextures, renderer: this._config.renderer});
+            const tile = new TileView({...this._config.tileTextures, renderer: this._config.renderer, index: i});
             const column = i % 4;
             const row = Math.floor(i / 4);
-            tile.container.x = column * (tile.container.width + tileSpacingX);
-            tile.container.y = row * (tile.container.height + tileSpacingY);
+            tile.x = column * (tile.width + tileSpacingX);
+            tile.y = row * (tile.height + tileSpacingY);
             this._tileViews.push(tile);
-            this.addChild(tile.container);
+            tile.clickSignal.addListener(this.onTileClicked, this);
+            this.addChild(tile);
         }
     }
 
@@ -44,14 +48,18 @@ export class GridView extends View<GridViewConfig>{
         const screenWidth = this._renderer.screen.width;
         const screenHeight = this._renderer.screen.height;
 
-        const containerWidth = this._container.width;
-        const containerHeight = this._container.height;
+        const containerWidth = this.width;
+        const containerHeight = this.height;
 
         const containerX = (screenWidth - containerWidth)/2;
         const containerY = (screenHeight - containerHeight)/2;
 
-        this._container.x = containerX;
-        this._container.y = containerY;
+        this.x = containerX;
+        this.y = containerY;
+    }
+
+    private onTileClicked(tileIndex: number|undefined){
+        this.tileClickedSignal.emit(tileIndex);
     }
 
     
@@ -68,6 +76,10 @@ export class GridView extends View<GridViewConfig>{
             const symbol = textures[i]
             tileViews[i].addSymbol(symbol);
         }
+    }
+
+    public getTileViews(){
+        return this._tileViews;
     }
 
 

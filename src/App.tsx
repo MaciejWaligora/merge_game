@@ -6,7 +6,7 @@ import { GridModel } from './Lib/Models/GridModel';
 import { AssetLoader } from './Lib/AssetLoader';
 import { GridView } from './Lib/Views/GridView';
 import { InputHandler } from './Lib/Handlers/InputHandler';
-import { Position } from './Lib/Models/TileModel';
+import { GameController } from './Lib/Controlers/GameController';
 
 
 
@@ -21,7 +21,8 @@ const config = {
   },
   assets:{
     background: "./background.png",
-    tile: "./tile.png"
+    tile: "./tile.png",
+    clickedTile: "./clickedTile.png"
   }
   
 }
@@ -29,17 +30,13 @@ const config = {
 const renderer = new PIXI.Application(config.display);
 const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
 const grid = new GridModel({symbols: symbolsForTheGame});
-const inputHandler = new InputHandler({renderer: renderer});
+const inputHandler = new InputHandler();
 
 let gridV:GridView;
 
-const onClick = (data: Position | undefined) =>{
-  console.log(data);
-}
-inputHandler.tileClickedSignal.addListener(onClick);
 
 AssetLoader.loadBackground(config.assets.background, renderer);
-AssetLoader.getTextures([config.assets.tile]).then((textures: PIXI.Texture[])=>{
+AssetLoader.getTextures([config.assets.tile, config.assets.clickedTile]).then((textures: PIXI.Texture[])=>{
     gridV = new GridView({
     tileTextures:{textureUnclicked: textures[0], textureClicked: textures[1]},
     size: config.grid.size, 
@@ -47,9 +44,18 @@ AssetLoader.getTextures([config.assets.tile]).then((textures: PIXI.Texture[])=>{
     tileSpacing: config.grid.tilespacing });
 
     gridV.addSymbols(symbolsForTheGame);
+    const tileViews = gridV.getTileViews();
+    for(let tileView of tileViews){
+      inputHandler.attachTilesClickHandler(tileView);
+    }
+    const gameController = new GameController({
+      gridModel: grid,
+      gridView: gridV
+    });
+
+    gameController.init();
 })
 
-console.log(grid)
 function App() {
   return (
     <div className="App">

@@ -1,13 +1,9 @@
 import { Model } from "./Model";
 import { Signal } from "../Signal";
 
-export interface Position{
-    x: number;
-    y: number;
-}
 
 export interface TileModelConfig{
-    position: Position;
+    index: number;
     symbol: string;
 }
 
@@ -23,14 +19,14 @@ export class TileModel<Tconfig extends TileModelConfig> extends Model{
     private _exists: boolean = true;
     private _isClicked: boolean = false;
     private _symbol: string;
-    private _position: Position;
+    private _index: number
 
-    public clickedSignal = new Signal();
+    public clickedSignal = new Signal<{index: number, state: boolean}>();
     public destroySignal = new Signal();
 
     constructor(config: Tconfig){
         super();
-        this._position = config.position;
+        this._index = config.index;
         this._symbol = config.symbol;
     }
 
@@ -42,8 +38,8 @@ export class TileModel<Tconfig extends TileModelConfig> extends Model{
         return this._isClicked;
     }
 
-    public getPosition(){
-        return this._position;
+    public getIndex(){
+        return this._index;
     }
 
     public getSymbol(){
@@ -52,13 +48,16 @@ export class TileModel<Tconfig extends TileModelConfig> extends Model{
 
 
     public update(data: TileData): void {
-        if ('exists' in data) {
-            this._exists = data.exists;
-            this.destroySignal.emit();
-        }
-        if ('isClicked' in data) {
-            this._isClicked = data.isClicked;
-            this.clickedSignal.emit();
+        this._isClicked = data.isClicked;
+        this._exists = data.exists;
+        if(this._exists){
+            const data = {
+                index:this._index,
+                state: this._isClicked
+            }
+            this.clickedSignal.emit(data);
         }
     }
+
+
 }
