@@ -2,11 +2,11 @@ import { Component, ReactNode, createRef } from "react";
 import * as PIXI from "pixijs"
 
 
-export interface GameConfig{
+export interface GameCanvasConfig{
     pixiApp: PIXI.Application;
 }
 
-export class GameCanvas extends Component <GameConfig> {
+export class GameCanvas extends Component <GameCanvasConfig> {
 
     private _parentRef = createRef<HTMLDivElement>();
 

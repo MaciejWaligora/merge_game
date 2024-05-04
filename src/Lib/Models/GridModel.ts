@@ -56,7 +56,9 @@ export class GridModel<Tconfig extends GridModelConfig> extends Model{
     }
 
     public removeSelection(index:number){
-        this._currentSelection.splice(index,1);
+        const tile = this._tiles[index]
+        const indexInSelection = this._currentSelection.indexOf(tile);
+        this._currentSelection.splice(indexInSelection,1);
     }
 
     public getCurrentSelection(){

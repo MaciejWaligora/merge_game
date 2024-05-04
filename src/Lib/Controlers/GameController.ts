@@ -1,26 +1,32 @@
 import { InputHandler } from "../Handlers/InputHandler";
 import { GridModel, GridModelConfig } from "../Models/GridModel";
+import { TimerModel, TimerModelConfig } from "../Models/TimerModel";
 import { GridView} from "../Views/GridView";
 import { ModelController, ModelControllerConfig } from "./ModelController";
+import { TimerModelController, TimerModelControllerConfig } from "./TimerModelController";
 import { ViewController, ViewControllerConfig } from "./ViewController";
 export interface GameControllerConfig{
     gridModel: GridModel<GridModelConfig>;
     gridView: GridView;
+    timerModel: TimerModel<TimerModelConfig>
 }
 
 export class GameController<Tconfig extends GameControllerConfig>{
 
     private _modelController: ModelController<ModelControllerConfig>;
     private _viewController: ViewController<ViewControllerConfig>;
+    private _timerModelController: TimerModelController<TimerModelControllerConfig>;
     private _inputHandler: InputHandler;
 
     constructor(config: Tconfig){
         this._modelController = new ModelController(config);
         this._viewController = new ViewController(config);
+        this._timerModelController = new TimerModelController(config);
         this._inputHandler = new InputHandler();
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
         this._modelController.tileDestroyedSignal.addListener(this.destroyTile, this);
+        this._timerModelController.gameOverSignal.addListener(this.onGameOver, this);
     }
 
     public init(){
@@ -41,5 +47,13 @@ export class GameController<Tconfig extends GameControllerConfig>{
 
     public destroyTile(index: number | undefined){
         this._viewController.destroyTile(index);
+    }
+
+    public onGameOver(){
+        console.log("Game Over! Time is up");
+    }
+
+    public start(){
+        this._timerModelController.start();
     }
 }
