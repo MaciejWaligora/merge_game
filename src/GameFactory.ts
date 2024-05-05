@@ -4,7 +4,7 @@ import { SymbolGenerator } from "./Lib/SymbolGenerator";
 import { GridModel, GridModelConfig } from "./Lib/Models/GridModel";
 import { InputHandler } from "./Lib/Handlers/InputHandler";
 import { GridView} from "./Lib/Views/GridView";
-import { GameController, GameControllerConfig } from "./Lib/Controlers/GameController";
+import { GameController, GameControllerConfig } from "./Lib/Controllers/GameController";
 import { GameConfig } from './Config/GameConfig';
 import { TimerModel } from './Lib/Models/TimerModel';
 import { TimerView } from './Lib/Views/TimerView';
