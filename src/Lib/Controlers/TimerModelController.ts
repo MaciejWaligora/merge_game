@@ -8,10 +8,12 @@ export interface TimerModelControllerConfig{
 export class TimerModelController<Tconfig extends TimerModelControllerConfig>{
     private _config: Tconfig
     public gameOverSignal = new Signal();
+    public timerTickSignal = new Signal<number>();
     
     constructor(config: Tconfig){
         this._config = config;
         config.timerModel.gameOverSignal.addListener(this.onGameOver, this);
+        config.timerModel.timerTickSignal.addListener(this.onTimerTick, this)
     }
 
     public start(){
@@ -24,5 +26,9 @@ export class TimerModelController<Tconfig extends TimerModelControllerConfig>{
 
     public onGameOver(){
         this.gameOverSignal.emit();
+    }
+
+    public onTimerTick(progress: number | undefined){
+        this.timerTickSignal.emit(progress);
     }
 }

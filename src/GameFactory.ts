@@ -29,10 +29,12 @@ export class GameFactory {
         const renderer = new PIXI.Application(config.display);
         AssetLoader.loadBackground(config.assets.background, renderer);
         const tileTextures = await AssetLoader.getTextures([config.assets.tile, config.assets.clickedTile]);
+        const timerTextures = await AssetLoader.getTextures([config.timer.background, config.timer.bar]);
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const grid = new GridModel({symbols: symbolsForTheGame});
         const timerModel = new TimerModel(config.timer);
         const inputHandler = new InputHandler();
+        
         const gridView = new GridView({
             tileTextures:{textureUnclicked: tileTextures[0], textureClicked: tileTextures[1]},
             size: config.grid.size, 
@@ -40,7 +42,14 @@ export class GameFactory {
             tileSpacing: config.grid.tilespacing
         });
 
-        
+        const timerView = new TimerView({
+            renderer: renderer, 
+            background: timerTextures[0], 
+            progressBar: timerTextures[1]
+        })
+        timerView.show();
+
+        timerView.setProgress(50);
         const tileViews = gridView.getTileViews();
 
         gridView.addSymbols(symbolsForTheGame);
@@ -52,16 +61,11 @@ export class GameFactory {
         const gameController = new GameController({
             gridModel: grid,
             gridView: gridView,
-            timerModel: timerModel
+            timerModel: timerModel,
+            timerView: timerView
           });
-        const timerView = new TimerView({
-            renderer: renderer, 
-            backgroundColor: config.timer.timerbackgroundcolor, 
-            height: config.timer.progressBarHeight
-        })
+        
 
-        timerView.show();
-        timerView.setProgress(100);
         gameController.init();
         gameController.start(); //TODO remove this after init popup is hooked up
 

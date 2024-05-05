@@ -16,6 +16,8 @@ export interface GameConfig {
         timelimit: number;
         progressBarHeight: number;
         timerbackgroundcolor: number;
+        background: string,
+        bar:string
     }
   }
 
@@ -36,6 +38,8 @@ export const config: GameConfig = {
     timer:{
         timelimit: 6000,
         progressBarHeight: 20,
-        timerbackgroundcolor: 0xffffff
+        timerbackgroundcolor: 0xffffff,
+        background:'./timer-background.png',
+        bar:'./timer-bar.png'
     }
   };
