@@ -32,7 +32,6 @@ export class CounterView extends View<CounterViewConfig>{
         this.addChild(this._counterLabelSprite);
         this.addChild(this._counterTileSprite);
         this.addChild(this._counterDisplay);
-        console.log(config.counterFont)
         this._placeChildrenRelatively();
         this._placeAboveGrid();
     }
@@ -70,6 +69,20 @@ export class CounterView extends View<CounterViewConfig>{
 
     public setCounterDisplay(val: number){
         this._counterDisplay.text = val.toString();
+        if(val >= 10){
+            this._adjustCounterDisplay();
+        }
+    }
+
+    private _adjustCounterDisplay(){
+        const children = this.children;
+        for(let i = 1; i < children.length; i++){
+            if(children[i] instanceof PIXI.Text){
+                const previous  = children[i-1] as PIXI.Sprite;
+                previous.width = children[i].getBounds().width +10;
+                children[i].x = children[i-1].x + (children[i-1].getBounds().width - children[i].getBounds().width)/2;
+            }
+        }
     }
 
 

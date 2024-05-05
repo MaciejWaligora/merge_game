@@ -71,14 +71,13 @@ export class GameFactory {
             counterFont: 'Chango Regular'
         })
 
-        counterView.setCounterDisplay(10);
-
         const gameController = new GameController({
             gridModel: grid,
             gridView: gridView,
             timerModel: timerModel,
             timerView: timerView,
-            counterModel: counterModel
+            counterModel: counterModel,
+            counterView: counterView
           });
         
 

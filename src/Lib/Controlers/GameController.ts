@@ -2,9 +2,11 @@ import { InputHandler } from "../Handlers/InputHandler";
 import { CounterModel } from "../Models/CounterModel";
 import { GridModel, GridModelConfig } from "../Models/GridModel";
 import { TimerModel, TimerModelConfig } from "../Models/TimerModel";
+import { CounterView } from "../Views/CounterView";
 import { GridView} from "../Views/GridView";
 import { TimerView } from "../Views/TimerView";
 import { CounterModelController, CounterModelControllerConfig } from "./CounterModelController";
+import { CounterViewController, CounterViewControllerConfig } from "./CounterViewController";
 import { ModelController, ModelControllerConfig } from "./ModelController";
 import { TimerModelController, TimerModelControllerConfig } from "./TimerModelController";
 import { TimerViewController, TimerViewControllerConfig } from "./TimerViewController";
@@ -15,6 +17,7 @@ export interface GameControllerConfig{
     timerModel: TimerModel<TimerModelConfig>;
     timerView: TimerView;
     counterModel: CounterModel;
+    counterView: CounterView;
 }
 
 export class GameController<Tconfig extends GameControllerConfig>{
@@ -24,6 +27,8 @@ export class GameController<Tconfig extends GameControllerConfig>{
     private _timerModelController: TimerModelController<TimerModelControllerConfig>;
     private _timerViewController: TimerViewController<TimerViewControllerConfig>;
     private _counterModelController: CounterModelController<CounterModelControllerConfig>;
+    private _counterViewController: CounterViewController<CounterViewControllerConfig>;
+
     private _inputHandler: InputHandler;
 
     constructor(config: Tconfig){
@@ -32,12 +37,14 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._timerModelController = new TimerModelController(config);
         this._timerViewController = new TimerViewController(config);
         this._counterModelController = new CounterModelController(config);
+        this._counterViewController = new CounterViewController(config);
         this._inputHandler = new InputHandler();
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
         this._modelController.tileDestroyedSignal.addListener(this.destroyTile, this);
         this._timerModelController.gameOverSignal.addListener(this.onGameOver, this);
         this._timerModelController.timerTickSignal.addListener(this.onTimerTick, this);
+        this._counterModelController.counterChangeSignal.addListener(this.onCounterChange, this);
     }
 
     public init(){
@@ -59,13 +66,16 @@ export class GameController<Tconfig extends GameControllerConfig>{
     public destroyTile(index: number | undefined){
         this._viewController.destroyTile(index);
         this._counterModelController.increaseCount();
-        console.log(this._counterModelController.getCount());
     }
 
     public onTimerTick(progress: number | undefined){
         if(progress){
             this._timerViewController.setProgress(progress);
         }    
+    }
+
+    public onCounterChange(val: number | undefined){
+        this._counterViewController.setCounterDisplay(val);
     }
 
     public onGameOver(){
