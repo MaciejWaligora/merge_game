@@ -42,6 +42,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
         this._modelController.tileDestroyedSignal.addListener(this.destroyTile, this);
+        this._modelController.gameWonSignal.addListener(this.onGameWon, this);
         this._timerModelController.gameOverSignal.addListener(this.onGameOver, this);
         this._timerModelController.timerTickSignal.addListener(this.onTimerTick, this);
         this._counterModelController.counterChangeSignal.addListener(this.onCounterChange, this);
@@ -80,6 +81,11 @@ export class GameController<Tconfig extends GameControllerConfig>{
 
     public onGameOver(){
         console.log("Game Over! Time is up");
+    }
+
+    public onGameWon(){
+        const time = this._timerModelController.stop();
+        console.log(`Congrats, you won, your time: ${time/1000}s`)
     }
 
     public start(){

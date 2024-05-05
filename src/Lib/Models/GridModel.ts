@@ -73,12 +73,24 @@ export class GridModel<Tconfig extends GridModelConfig> extends Model{
         return data
     }
 
+    public unExist(index: number | undefined){
+        if(index !== undefined){
+            this._tiles[index].update({exists: false, isClicked: false})
+        }
+    }
+
     public clearSelection(){
         const currentSelection = this._currentSelection;
-        for(let selected of currentSelection){
-            selected.update({exists: true, isClicked: false});
+        for(let i = 0; i < currentSelection.length ; i++){
+            const tile = currentSelection[i]
+            const index = this._tiles.indexOf(tile);
+           this._tiles[index].update({exists: false, isClicked: true})
         }
         this._currentSelection = [];
+    }
+
+    public getTiles(){
+        return this._tiles;
     }
 
     private countUniqueSymbols(){

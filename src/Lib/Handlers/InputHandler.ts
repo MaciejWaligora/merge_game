@@ -6,6 +6,6 @@ export class InputHandler{
 
     public attachTilesClickHandler(TileView: TileView) {
         TileView.interactive = true;
-        TileView.on('click', TileView.click);
+        TileView.on('pointerdown', TileView.click);
     }
 }

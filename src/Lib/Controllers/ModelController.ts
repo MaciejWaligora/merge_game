@@ -1,4 +1,5 @@
 import { GridModel, GridModelConfig } from "../Models/GridModel";
+import { TileModel, TileModelConfig } from "../Models/TileModel";
 import { Signal } from "../Signal";
 
 export interface ModelControllerConfig{
@@ -9,6 +10,7 @@ export class ModelController<Tconfig extends ModelControllerConfig>{
     private _config: Tconfig;
     public tileClickedSignal = new Signal<{index:number, state: boolean}>();
     public tileDestroyedSignal = new Signal<number>();
+    public gameWonSignal = new Signal();
     constructor(config: Tconfig){
         this._config = config;
         config.gridModel.tileClickedSignal.addListener(this.onTileClicked, this);
@@ -56,10 +58,11 @@ export class ModelController<Tconfig extends ModelControllerConfig>{
         }
         model.addSelection(index);
         model.updateTile(index, true, true);
-        this.checkifCleared();
+        this.checkifSymbolCleared();
+        
     }
 
-    public checkifCleared(){
+    public checkifSymbolCleared(){
         const model = this._config.gridModel
         const currentSelection = model.getCurrentSelection();
         const symbol = currentSelection[0].getSymbol();
@@ -69,7 +72,26 @@ export class ModelController<Tconfig extends ModelControllerConfig>{
                 selected.update({exists: false, isClicked: true});
             }
             this.clearSelection();
+            this.checkifGridCleared()
         }
+    }
+
+    public checkifGridCleared(){
+        const model = this._config.gridModel;
+        const tiles = model.getTiles() as TileModel<TileModelConfig>[]
+        const allTilesQty = tiles.length;
+        let guessedTilesQty = 0;
+
+        for(let tile of tiles){
+            if(!tile.exists()){
+                guessedTilesQty++;
+            }
+        }
+
+        if(allTilesQty === guessedTilesQty){
+            this.gameWonSignal.emit();
+        }
+
     }
 
 

@@ -21,7 +21,7 @@ export class TimerModelController<Tconfig extends TimerModelControllerConfig>{
     }
 
     public stop(){
-        this._config.timerModel.stop();
+       return this._config.timerModel.stop();
     }
 
     public onGameOver(){

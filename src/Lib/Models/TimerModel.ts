@@ -34,6 +34,7 @@ export class TimerModel<TConfig extends TimerModelConfig> extends Model{
 
     public stop(){
         clearInterval(this._interval);
+        return this._currentTime;
     }
 
     update(data: any): void {
