@@ -2,6 +2,8 @@ export interface GameConfig {
     display: {
       width: number;
       height: number;
+      autoResize: boolean;
+      resolution: number;
     };
     grid: {
       size: number;
@@ -31,6 +33,8 @@ export const config: GameConfig = {
     display: {
       width: 1080,
       height: 1920,
+      autoResize: true,
+      resolution: window.devicePixelRatio
     },
     grid: {
       size: 16,
