@@ -18,6 +18,12 @@ export interface GameConfig {
         timerbackgroundcolor: number;
         background: string,
         bar:string
+    },
+    counter:{
+        counterHandle: string;
+        counterLabel: string;
+        counterTile: string;
+        font: string;
     }
   }
 
@@ -41,5 +47,11 @@ export const config: GameConfig = {
         timerbackgroundcolor: 0xffffff,
         background:'./timer-background.png',
         bar:'./timer-bar.png'
+    },
+    counter:{
+        counterHandle: './counter-handle.png',
+        counterLabel: './counter-label.png',
+        counterTile: './counter-tile.png',
+        font: './Chango-Regular.ttf'
     }
   };

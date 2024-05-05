@@ -8,6 +8,8 @@ import { GameController, GameControllerConfig } from "./Lib/Controlers/GameContr
 import { GameConfig } from './Config/GameConfig';
 import { TimerModel } from './Lib/Models/TimerModel';
 import { TimerView } from './Lib/Views/TimerView';
+import { CounterModel } from './Lib/Models/CounterModel';
+import { CounterView } from './Lib/Views/CounterView';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -30,9 +32,12 @@ export class GameFactory {
         AssetLoader.loadBackground(config.assets.background, renderer);
         const tileTextures = await AssetLoader.getTextures([config.assets.tile, config.assets.clickedTile]);
         const timerTextures = await AssetLoader.getTextures([config.timer.background, config.timer.bar]);
+        const counterTextures = await AssetLoader.getTextures([config.counter.counterHandle, config.counter.counterLabel, config.counter.counterTile]);
+        await AssetLoader.loadFont(config.counter.font);
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const grid = new GridModel({symbols: symbolsForTheGame});
         const timerModel = new TimerModel(config.timer);
+        const counterModel = new CounterModel();
         const inputHandler = new InputHandler();
         
         const gridView = new GridView({
@@ -42,27 +47,38 @@ export class GameFactory {
             tileSpacing: config.grid.tilespacing
         });
 
+        const tileViews = gridView.getTileViews();
+        gridView.addSymbols(symbolsForTheGame);
+        for(let tileView of tileViews){
+            inputHandler.attachTilesClickHandler(tileView);
+        }
+
+
         const timerView = new TimerView({
             renderer: renderer, 
             background: timerTextures[0], 
             progressBar: timerTextures[1]
         })
         timerView.show();
-
         timerView.setProgress(50);
-        const tileViews = gridView.getTileViews();
 
-        gridView.addSymbols(symbolsForTheGame);
 
-        for(let tileView of tileViews){
-            inputHandler.attachTilesClickHandler(tileView);
-        }
+        const counterView = new CounterView({
+            renderer: renderer,
+            counterHandle: counterTextures[0],
+            counterLabel: counterTextures[1],
+            counterTile: counterTextures[2],
+            counterFont: 'Chango Regular'
+        })
+
+        counterView.setCounterDisplay(10);
 
         const gameController = new GameController({
             gridModel: grid,
             gridView: gridView,
             timerModel: timerModel,
-            timerView: timerView
+            timerView: timerView,
+            counterModel: counterModel
           });
         
 
@@ -81,6 +97,6 @@ export class GameFactory {
                 gameController: gameController
             }
         }
-
     }
+
 }

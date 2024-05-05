@@ -26,4 +26,10 @@ export class AssetLoader{
         
         return textures;
     }
+
+    public static async loadFont(path: string){
+        Assets.addBundle('fonts', {src: path });
+        const bundle = await Assets.loadBundle('fonts');
+        document.fonts.add(bundle.src);
+    }
 }

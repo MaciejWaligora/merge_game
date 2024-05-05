@@ -1,7 +1,10 @@
 .App {
   text-align: center;
 }
-
+@font-face {
+  font-family: 'GameFont';
+  src: url('../public/Chango-Regular.ttf');
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

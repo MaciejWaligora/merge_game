@@ -1,8 +1,10 @@
 import { InputHandler } from "../Handlers/InputHandler";
+import { CounterModel } from "../Models/CounterModel";
 import { GridModel, GridModelConfig } from "../Models/GridModel";
 import { TimerModel, TimerModelConfig } from "../Models/TimerModel";
 import { GridView} from "../Views/GridView";
 import { TimerView } from "../Views/TimerView";
+import { CounterModelController, CounterModelControllerConfig } from "./CounterModelController";
 import { ModelController, ModelControllerConfig } from "./ModelController";
 import { TimerModelController, TimerModelControllerConfig } from "./TimerModelController";
 import { TimerViewController, TimerViewControllerConfig } from "./TimerViewController";
@@ -12,6 +14,7 @@ export interface GameControllerConfig{
     gridView: GridView;
     timerModel: TimerModel<TimerModelConfig>;
     timerView: TimerView;
+    counterModel: CounterModel;
 }
 
 export class GameController<Tconfig extends GameControllerConfig>{
@@ -20,6 +23,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
     private _viewController: ViewController<ViewControllerConfig>;
     private _timerModelController: TimerModelController<TimerModelControllerConfig>;
     private _timerViewController: TimerViewController<TimerViewControllerConfig>;
+    private _counterModelController: CounterModelController<CounterModelControllerConfig>;
     private _inputHandler: InputHandler;
 
     constructor(config: Tconfig){
@@ -27,6 +31,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._viewController = new ViewController(config);
         this._timerModelController = new TimerModelController(config);
         this._timerViewController = new TimerViewController(config);
+        this._counterModelController = new CounterModelController(config);
         this._inputHandler = new InputHandler();
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
@@ -53,6 +58,8 @@ export class GameController<Tconfig extends GameControllerConfig>{
 
     public destroyTile(index: number | undefined){
         this._viewController.destroyTile(index);
+        this._counterModelController.increaseCount();
+        console.log(this._counterModelController.getCount());
     }
 
     public onTimerTick(progress: number | undefined){
