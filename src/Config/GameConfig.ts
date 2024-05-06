@@ -60,7 +60,7 @@ export const config: GameConfig = {
       clickedTile: './clickedTile.png',
     },
     timer:{
-        timelimit: 600,
+        timelimit: 3000,
         progressBarHeight: 20,
         timerbackgroundcolor: 0xffffff,
         background:'./timer-background.png',

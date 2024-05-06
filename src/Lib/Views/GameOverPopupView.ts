@@ -13,12 +13,30 @@ export class GameOverPopupView<Tconfig extends GameOverPopupViewConfig> extends 
 
     private _buttonContainer: ButtonView<ButtonViewConfig>;
 
-    private restartButtonSignal = new Signal();
+    public restartButtonSignal = new Signal();
 
     constructor(config: Tconfig){
         super(config)
-
         this._buttonContainer = new ButtonView(config);
+        this._place();
+        this.addChild(this._buttonContainer);
+        this._buttonContainer.clickedSignal.addListener(this.onButtonClicked, this);
+    }
+
+    private _place(){
+        const prevChildY = this.children[this.children.length-1].y;
+        const screenWidth = this._renderer.screen.width;
+
+        this._buttonContainer.y = prevChildY + 320;
+        this._buttonContainer.x = (screenWidth -  this._buttonContainer.width)/2; 
+    }
+
+    public onButtonClicked(){
+        this.restartButtonSignal.emit();
+    }
+
+    public getButton(){
+        return this._buttonContainer
     }
 
 

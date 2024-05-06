@@ -36,12 +36,11 @@ export class StartPopupView<Tconfig extends StartPopupViewConfig> extends PopupV
        
     }
 
-    public getButtonAndFunctionality(){
+    public getButton(){
         return this._buttonContainer
     }
 
     public onButtonClicked(){
-        console.log('startClicked')
         this.startButtonClickedSignal.emit();
     }
 

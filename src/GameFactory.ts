@@ -15,6 +15,7 @@ import { GameWonPopupModel } from './Lib/Models/GameWonPopupModel';
 import { GameOverPopupModel } from './Lib/Models/GameOverPopupModel';
 import { StartPopupView } from './Lib/Views/StartPopupView';
 import { GameWonPopupView } from './Lib/Views/GameWonPopupView';
+import { GameOverPopupView } from './Lib/Views/GameOverPopupView';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -40,6 +41,7 @@ export class GameFactory {
         const counterTextures = await AssetLoader.getTextures([config.counter.counterHandle, config.counter.counterLabel, config.counter.counterTile]);
         const startPopupTexture = await AssetLoader.getTextures([config.popups.backgroundtexture, config.popups.startPopupTextBackgroundTexture, config.popups.startPopupTextTexture, config.popups.popupButtonTexture, config.popups.startPopupButtonTextTexture]);
         const gameWonPopupTexture = await AssetLoader.getTextures([config.popups.backgroundtexture, config.popups.gameWonTextBackgroundTexture, config.popups.gameWonTextTexture, config.popups.gameWonTimeInfoBackground]);
+        const gameOverPopupTextures = await AssetLoader.getTextures([config.popups.backgroundtexture, config.popups.gameOverPopupTextBackgroundTexture, config.popups.gameOverPopupText, config.popups.popupButtonTexture, config.popups.gameOverPopupButtonText])
         await AssetLoader.loadFont(config.counter.font);
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const grid = new GridModel({symbols: symbolsForTheGame});
@@ -91,8 +93,8 @@ export class GameFactory {
         });
 
         startPopupView.show();
-        const startbutton = startPopupView.getButtonAndFunctionality();
-        inputHandler.attachStartButtonClickHandler(startbutton);
+        const startbutton = startPopupView.getButton();
+        inputHandler.attachButtonClickHandler(startbutton);
 
         const gameWonPopupView = new GameWonPopupView({
             renderer: renderer,
@@ -101,7 +103,19 @@ export class GameFactory {
             text: gameWonPopupTexture[2],
             timeInfoBackground: gameWonPopupTexture[3],
             font: 'Chango Regular'
+        });
+
+        const gameOverPopupView = new GameOverPopupView({
+            renderer: renderer,
+            backgroundTexture: gameOverPopupTextures[0],
+            textBackgroundTexture: gameOverPopupTextures[1],
+            text: gameOverPopupTextures[2],
+            buttonTexture: gameOverPopupTextures[3],
+            buttonTextTexture: gameOverPopupTextures[4]
         })
+
+        const restratButton  = gameOverPopupView.getButton();
+        inputHandler.attachButtonClickHandler(restratButton);
 
 
         const gameController = new GameController({
@@ -115,7 +129,8 @@ export class GameFactory {
             gameWonPopupModel: gameWonPopupModel,
             startPopupModel: startPopupModel,
             startPopupView: startPopupView,
-            gameWonPopupView: gameWonPopupView
+            gameWonPopupView: gameWonPopupView,
+            gameOverPopupView: gameOverPopupView
           });
         
 
