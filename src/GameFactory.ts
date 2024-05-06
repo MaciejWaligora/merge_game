@@ -13,6 +13,7 @@ import { CounterView } from './Lib/Views/CounterView';
 import { StartPopupModel } from './Lib/Models/StartPopupModel';
 import { GameWonPopupModel } from './Lib/Models/GameWonPopupModel';
 import { GameOverPopupModel } from './Lib/Models/GameOverPopupModel';
+import { StartPopupView } from './Lib/Views/StartPopupView';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -36,6 +37,7 @@ export class GameFactory {
         const tileTextures = await AssetLoader.getTextures([config.assets.tile, config.assets.clickedTile]);
         const timerTextures = await AssetLoader.getTextures([config.timer.background, config.timer.bar]);
         const counterTextures = await AssetLoader.getTextures([config.counter.counterHandle, config.counter.counterLabel, config.counter.counterTile]);
+        const startPopupTexture = await AssetLoader.getTextures([config.popups.backgroundtexture, config.popups.startPopupTextBackgroundTexture, config.popups.startPopupTextTexture, config.popups.popupButtonTexture, config.popups.startPopupButtonTextTexture]);
         await AssetLoader.loadFont(config.counter.font);
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const grid = new GridModel({symbols: symbolsForTheGame});
@@ -75,6 +77,23 @@ export class GameFactory {
             counterTile: counterTextures[2],
             counterFont: 'Chango Regular'
         })
+        counterView.show();
+
+        const startPopupView = new StartPopupView({
+            renderer: renderer,
+            backgroundTexture: startPopupTexture[0],
+            textBackgroundTexture: startPopupTexture[1],
+            text: startPopupTexture[2],
+            buttonTexture: startPopupTexture[3],
+            buttonTextTexture: startPopupTexture[4]
+        });
+
+        startPopupView.show();
+        const startbutton = startPopupView.getButtonAndFunctionality();
+        inputHandler.attachStartButtonClickHandler(startbutton);
+
+
+
 
         const gameController = new GameController({
             gridModel: grid,
@@ -85,7 +104,8 @@ export class GameFactory {
             counterView: counterView,
             gameOverPopupModel: gameOverPopupModel,
             gameWonPopupModel: gameWonPopupModel,
-            startPopupModel: startPopupModel
+            startPopupModel: startPopupModel,
+            startPopupView: startPopupView
           });
         
 

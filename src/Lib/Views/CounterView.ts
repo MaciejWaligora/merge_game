@@ -23,7 +23,6 @@ export class CounterView extends View<CounterViewConfig>{
             fontSize: 45,
             fontWeight: 'lighter'
         })
-        this._renderer.stage.addChild(this);
         this._counterHandleSprite = new PIXI.Sprite(config.counterHandle);
         this._counterLabelSprite = new PIXI.Sprite(config.counterLabel);
         this._counterTileSprite = new PIXI.Sprite(config.counterTile);

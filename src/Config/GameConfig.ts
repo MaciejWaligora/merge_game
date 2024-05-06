@@ -26,13 +26,23 @@ export interface GameConfig {
         counterLabel: string;
         counterTile: string;
         font: string;
+    },
+    popups:{
+      backgroundtexture: string,
+      popupButtonTexture: string,
+      gameOverPopupTextBackgroundTexture: string,
+      gameOverPopupButtonText: string,
+      gameOverPopupText: string,
+      startPopupTextBackgroundTexture: string,
+      startPopupButtonTextTexture:string,
+      startPopupTextTexture: string
     }
   }
 
 export const config: GameConfig = {
     display: {
-      width: window.innerWidth >= 1080 ? 1080 : window.innerWidth,
-      height: window.innerHeight >= 1920 ? 1920: window.innerHeight,
+      width: 1080,
+      height: 1920,
       autoResize: true,
       resolution: window.devicePixelRatio
     },
@@ -57,5 +67,15 @@ export const config: GameConfig = {
         counterLabel: './counter-label.png',
         counterTile: './counter-tile.png',
         font: './Chango-Regular.ttf'
+    },
+    popups:{
+      backgroundtexture: './PopupBackground.png',
+      popupButtonTexture: './PopupButton.png',
+      gameOverPopupTextBackgroundTexture: './GameOverPopUpCircle.png',
+      gameOverPopupButtonText: './GameOverPopupButtonText.png',
+      gameOverPopupText: './GameOverPopupText.png',
+      startPopupTextBackgroundTexture: './StartPopupTextBackground.png',
+      startPopupButtonTextTexture:'./StartPopupButtonText.png',
+      startPopupTextTexture: './StartPopupText.png'
     }
   };
