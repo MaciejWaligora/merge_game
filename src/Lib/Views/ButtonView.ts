@@ -3,12 +3,12 @@ import { View, ViewConfig } from "./View";
 
 import * as PIXI from 'pixijs';
 
-export interface StartButtonViewConfig extends ViewConfig{
+export interface ButtonViewConfig extends ViewConfig{
     buttonTexture: PIXI.Texture;
     buttonTextTexture: PIXI.Texture;
 }
 
-export class ButtonView<Tconfig extends StartButtonViewConfig> extends View<StartButtonViewConfig>{
+export class ButtonView<Tconfig extends ButtonViewConfig> extends View<ButtonViewConfig>{
     private _buttonSprite: PIXI.Sprite;
     private _buttonTextSprite: PIXI.Sprite;
 

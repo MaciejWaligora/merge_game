@@ -1,5 +1,5 @@
 import { Signal } from "../Signal";
-import { ButtonView, StartButtonViewConfig } from "./ButtonView";
+import { ButtonView, ButtonViewConfig } from "./ButtonView";
 import { PopupView, PopupViewConfig } from "./PopupView";
 import * as PIXI from 'pixijs'
 
@@ -11,7 +11,7 @@ export interface StartPopupViewConfig extends PopupViewConfig{
 export class StartPopupView<Tconfig extends StartPopupViewConfig> extends PopupView<StartPopupViewConfig>{
 
     
-    private _buttonContainer: ButtonView<StartButtonViewConfig>;
+    private _buttonContainer: ButtonView<ButtonViewConfig>;
 
     public startButtonClickedSignal = new Signal();
 

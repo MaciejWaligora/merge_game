@@ -14,6 +14,7 @@ import { StartPopupModel } from './Lib/Models/StartPopupModel';
 import { GameWonPopupModel } from './Lib/Models/GameWonPopupModel';
 import { GameOverPopupModel } from './Lib/Models/GameOverPopupModel';
 import { StartPopupView } from './Lib/Views/StartPopupView';
+import { GameWonPopupView } from './Lib/Views/GameWonPopupView';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -38,6 +39,7 @@ export class GameFactory {
         const timerTextures = await AssetLoader.getTextures([config.timer.background, config.timer.bar]);
         const counterTextures = await AssetLoader.getTextures([config.counter.counterHandle, config.counter.counterLabel, config.counter.counterTile]);
         const startPopupTexture = await AssetLoader.getTextures([config.popups.backgroundtexture, config.popups.startPopupTextBackgroundTexture, config.popups.startPopupTextTexture, config.popups.popupButtonTexture, config.popups.startPopupButtonTextTexture]);
+        const gameWonPopupTexture = await AssetLoader.getTextures([config.popups.backgroundtexture, config.popups.gameWonTextBackgroundTexture, config.popups.gameWonTextTexture, config.popups.gameWonTimeInfoBackground]);
         await AssetLoader.loadFont(config.counter.font);
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const grid = new GridModel({symbols: symbolsForTheGame});
@@ -92,7 +94,14 @@ export class GameFactory {
         const startbutton = startPopupView.getButtonAndFunctionality();
         inputHandler.attachStartButtonClickHandler(startbutton);
 
-
+        const gameWonPopupView = new GameWonPopupView({
+            renderer: renderer,
+            backgroundTexture: gameWonPopupTexture[0],
+            textBackgroundTexture: gameWonPopupTexture[1],
+            text: gameWonPopupTexture[2],
+            timeInfoBackground: gameWonPopupTexture[3],
+            font: 'Chango Regular'
+        })
 
 
         const gameController = new GameController({
@@ -105,7 +114,8 @@ export class GameFactory {
             gameOverPopupModel: gameOverPopupModel,
             gameWonPopupModel: gameWonPopupModel,
             startPopupModel: startPopupModel,
-            startPopupView: startPopupView
+            startPopupView: startPopupView,
+            gameWonPopupView: gameWonPopupView
           });
         
 

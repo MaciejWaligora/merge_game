@@ -35,7 +35,11 @@ export interface GameConfig {
       gameOverPopupText: string,
       startPopupTextBackgroundTexture: string,
       startPopupButtonTextTexture:string,
-      startPopupTextTexture: string
+      startPopupTextTexture: string,
+      gameWonTextTexture: string,
+      gameWonTextBackgroundTexture:string,
+      gameWonTimeInfoBackground:string,
+      font:string
     }
   }
 
@@ -56,7 +60,7 @@ export const config: GameConfig = {
       clickedTile: './clickedTile.png',
     },
     timer:{
-        timelimit: 6000,
+        timelimit: 600,
         progressBarHeight: 20,
         timerbackgroundcolor: 0xffffff,
         background:'./timer-background.png',
@@ -76,6 +80,10 @@ export const config: GameConfig = {
       gameOverPopupText: './GameOverPopupText.png',
       startPopupTextBackgroundTexture: './StartPopupTextBackground.png',
       startPopupButtonTextTexture:'./StartPopupButtonText.png',
-      startPopupTextTexture: './StartPopupText.png'
+      startPopupTextTexture: './StartPopupText.png',
+      gameWonTextTexture: './GameWonText.png',
+      gameWonTextBackgroundTexture: './GameWonPopupCircle.png',
+      gameWonTimeInfoBackground: './StartPopupTextBackground.png',
+      font: './Chango-Regular.ttf'
     }
   };
