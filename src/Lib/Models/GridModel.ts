@@ -84,7 +84,9 @@ export class GridModel<Tconfig extends GridModelConfig> extends Model{
         for(let i = 0; i < currentSelection.length ; i++){
             const tile = currentSelection[i]
             const index = this._tiles.indexOf(tile);
-           this._tiles[index].update({exists: false, isClicked: true})
+            if(this._tiles[index].exists()){
+                this._tiles[index].update({exists: true, isClicked: false})
+            }
         }
         this._currentSelection = [];
     }

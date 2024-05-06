@@ -10,6 +10,9 @@ import { TimerModel } from './Lib/Models/TimerModel';
 import { TimerView } from './Lib/Views/TimerView';
 import { CounterModel } from './Lib/Models/CounterModel';
 import { CounterView } from './Lib/Views/CounterView';
+import { StartPopupModel } from './Lib/Models/StartPopupModel';
+import { GameWonPopupModel } from './Lib/Models/GameWonPopupModel';
+import { GameOverPopupModel } from './Lib/Models/GameOverPopupModel';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -38,6 +41,9 @@ export class GameFactory {
         const grid = new GridModel({symbols: symbolsForTheGame});
         const timerModel = new TimerModel(config.timer);
         const counterModel = new CounterModel();
+        const startPopupModel = new StartPopupModel();
+        const gameWonPopupModel = new GameWonPopupModel();
+        const gameOverPopupModel = new GameOverPopupModel();
         const inputHandler = new InputHandler();
         
         const gridView = new GridView({
@@ -60,7 +66,6 @@ export class GameFactory {
             progressBar: timerTextures[1]
         })
         timerView.show();
-        timerView.setProgress(50);
 
 
         const counterView = new CounterView({
@@ -77,12 +82,14 @@ export class GameFactory {
             timerModel: timerModel,
             timerView: timerView,
             counterModel: counterModel,
-            counterView: counterView
+            counterView: counterView,
+            gameOverPopupModel: gameOverPopupModel,
+            gameWonPopupModel: gameWonPopupModel,
+            startPopupModel: startPopupModel
           });
         
 
         gameController.init();
-        gameController.start(); //TODO remove this after init popup is hooked up
 
         return {
             renderer: renderer,

@@ -1,16 +1,23 @@
 import { InputHandler } from "../Handlers/InputHandler";
 import { CounterModel } from "../Models/CounterModel";
+import { GameOverPopupModel } from "../Models/GameOverPopupModel";
+import { GameWonPopupModel } from "../Models/GameWonPopupModel";
 import { GridModel, GridModelConfig } from "../Models/GridModel";
+import { StartPopupModel } from "../Models/StartPopupModel";
 import { TimerModel, TimerModelConfig } from "../Models/TimerModel";
 import { CounterView } from "../Views/CounterView";
 import { GridView} from "../Views/GridView";
 import { TimerView } from "../Views/TimerView";
 import { CounterModelController, CounterModelControllerConfig } from "./CounterModelController";
 import { CounterViewController, CounterViewControllerConfig } from "./CounterViewController";
+import { GameWonPopupModelController } from "./GameWonPopupModelController";
+import { GameOverPopupModelController } from "./GamoeOverPopupModelController";
 import { ModelController, ModelControllerConfig } from "./ModelController";
+import { StartPopupModelController, StartPopupModelControllerConfig } from "./StartPopupModelController";
 import { TimerModelController, TimerModelControllerConfig } from "./TimerModelController";
 import { TimerViewController, TimerViewControllerConfig } from "./TimerViewController";
 import { ViewController, ViewControllerConfig } from "./ViewController";
+
 export interface GameControllerConfig{
     gridModel: GridModel<GridModelConfig>;
     gridView: GridView;
@@ -18,6 +25,9 @@ export interface GameControllerConfig{
     timerView: TimerView;
     counterModel: CounterModel;
     counterView: CounterView;
+    startPopupModel: StartPopupModel;
+    gameOverPopupModel: GameOverPopupModel;
+    gameWonPopupModel: GameWonPopupModel;
 }
 
 export class GameController<Tconfig extends GameControllerConfig>{
@@ -28,6 +38,9 @@ export class GameController<Tconfig extends GameControllerConfig>{
     private _timerViewController: TimerViewController<TimerViewControllerConfig>;
     private _counterModelController: CounterModelController<CounterModelControllerConfig>;
     private _counterViewController: CounterViewController<CounterViewControllerConfig>;
+    private _startPopupModelController: StartPopupModelController;
+    private _gameOverPopupModelController: GameOverPopupModelController;
+    private _gameWonPopupModelController: GameWonPopupModelController;
 
     private _inputHandler: InputHandler;
 
@@ -38,6 +51,10 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._timerViewController = new TimerViewController(config);
         this._counterModelController = new CounterModelController(config);
         this._counterViewController = new CounterViewController(config);
+        this._startPopupModelController = new StartPopupModelController({popupModel: config.startPopupModel});
+        this._gameOverPopupModelController = new GameOverPopupModelController({popupModel: config.gameOverPopupModel});
+        this._gameWonPopupModelController = new GameWonPopupModelController({popupModel: config.gameWonPopupModel});
+
         this._inputHandler = new InputHandler();
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
@@ -46,6 +63,15 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._timerModelController.gameOverSignal.addListener(this.onGameOver, this);
         this._timerModelController.timerTickSignal.addListener(this.onTimerTick, this);
         this._counterModelController.counterChangeSignal.addListener(this.onCounterChange, this);
+        this._startPopupModelController.openSignal.addListener(this.onStartPopupOpen, this);
+        this._startPopupModelController.closeSignal.addListener(this.onStartPopupClose, this);
+        this._gameOverPopupModelController.openSignal.addListener(this.onGameOverPopupOpen, this);
+        this._gameOverPopupModelController.closeSignal.addListener(this.onGameOverPopupClose, this);
+        this._gameWonPopupModelController.openSignal.addListener(this.onGameWonPopupOpen, this);
+        this._gameWonPopupModelController.closeSignal.addListener(this.onGameWonpopupClose, this);
+
+        this._startPopupModelController.show();
+        setTimeout(()=>{this._startPopupModelController.hide()}, 3000)
     }
 
     public init(){
@@ -80,15 +106,40 @@ export class GameController<Tconfig extends GameControllerConfig>{
     }
 
     public onGameOver(){
-        console.log("Game Over! Time is up");
+        this._gameOverPopupModelController.show();
     }
 
     public onGameWon(){
         const time = this._timerModelController.stop();
-        console.log(`Congrats, you won, your time: ${time/1000}s`)
+        this._gameWonPopupModelController.show();
+        
     }
 
-    public start(){
+    public onStartPopupOpen(){
+
+    }
+
+    public onStartPopupClose(){
+        this._start();
+        console.log('GameStart!')
+    }
+
+    public onGameOverPopupOpen(){
+        console.log("Game Over! Time is up");
+    }
+
+    public onGameOverPopupClose(){
+
+    }
+
+    public onGameWonPopupOpen(){
+        const time = this._timerModelController.stop();
+        console.log(`Congrats, you won, your time: ${time/100}s`)
+    }
+
+    public onGameWonpopupClose(){}
+
+    private _start(){
         this._timerModelController.start();
     }
 }
