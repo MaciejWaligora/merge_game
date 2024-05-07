@@ -1,3 +1,4 @@
+import { AudioManager, AudioManagerConfig } from "../AudioManager";
 import { InputHandler } from "../Handlers/InputHandler";
 import { CounterModel } from "../Models/CounterModel";
 import { GameOverPopupModel } from "../Models/GameOverPopupModel";
@@ -37,6 +38,7 @@ export interface GameControllerConfig{
     startPopupView: StartPopupView<StartPopupViewConfig>;
     gameWonPopupView: GameWonPopupView<GameWonPopupViewConfig>;
     gameOverPopupView: GameOverPopupView<GameOverPopupViewConfig>;
+    audioManager: AudioManager<AudioManagerConfig>;
 }
 
 export class GameController<Tconfig extends GameControllerConfig>{
@@ -53,6 +55,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
     private _startPopupViewController: StartPopupViewController<StartPopupViewControllerConfig>
     private _gameWonPopupViewController: GameWonPopupViewController<GameWonPopupViewControllerConfig>;
     private _gameOverPopupViewController: GameOverPopupViewController<GameOverPopupViewControllerConfig>;
+    private _audioManager: AudioManager<AudioManagerConfig>;
 
     private _inputHandler: InputHandler;
 
@@ -71,9 +74,12 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._gameOverPopupViewController = new GameOverPopupViewController(config);
         this._inputHandler = new InputHandler();
 
+        this._audioManager =  config.audioManager;
+
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
         this._modelController.tileDestroyedSignal.addListener(this.destroyTile, this);
         this._modelController.gameWonSignal.addListener(this.onGameWon, this);
+        this._modelController.selectionClearedSignal.addListener(this.onSelectionClearedSignal, this);
         this._timerModelController.gameOverSignal.addListener(this.onGameOver, this);
         this._timerModelController.timerTickSignal.addListener(this.onTimerTick, this);
         this._counterModelController.counterChangeSignal.addListener(this.onCounterChange, this);
@@ -103,7 +109,14 @@ export class GameController<Tconfig extends GameControllerConfig>{
     public updateView(data: {index:number, state: boolean} | undefined){
         if(data){
             this._viewController.updateView(data.index, data.state);
+            if(data.state){
+                this._audioManager.playSelectSound();
+            }
         }  
+    }
+
+    public onSelectionClearedSignal(){
+        this._audioManager.playUnselectSound();
     }
 
     public destroyTile(index: number | undefined){
@@ -123,19 +136,24 @@ export class GameController<Tconfig extends GameControllerConfig>{
 
     public onGameOver(){
         this._gameOverPopupModelController.show();
+        this._audioManager.playFailSound();
     }
 
     public onGameWon(){
         const time = this._timerModelController.stop();
         this._gameWonPopupModelController.show();
+        this._audioManager.playSuccessSound();
         
     }
 
     public onRestartButtonClicked(){
+        this._audioManager.playButtonSound();
         window.location.reload();
+
     }
 
     public onStartButtonClicked(){
+        this._audioManager.playButtonSound();
         this._startPopupModelController.hide();
     }
 

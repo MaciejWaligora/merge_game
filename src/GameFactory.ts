@@ -17,6 +17,7 @@ import { StartPopupView } from './Lib/Views/StartPopupView';
 import { GameWonPopupView } from './Lib/Views/GameWonPopupView';
 import { GameOverPopupView } from './Lib/Views/GameOverPopupView';
 import { Scaler } from './Lib/Scaler';
+import { AudioManager } from './Lib/AudioManager';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -44,7 +45,7 @@ export class GameFactory {
         const textures = await GameFactory.loadAssets(config, renderer);
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const models = await GameFactory.loadModels(config, symbolsForTheGame);
-        
+        const audioManager = new AudioManager(config.audio);
         const gridView = new GridView({
             tileTextures:{textureUnclicked: textures.tileTextures[0], textureClicked: textures.tileTextures[1]},
             size: config.grid.size, 
@@ -125,7 +126,8 @@ export class GameFactory {
             startPopupModel: models.startPopupModel,
             startPopupView: startPopupView,
             gameWonPopupView: gameWonPopupView,
-            gameOverPopupView: gameOverPopupView
+            gameOverPopupView: gameOverPopupView,
+            audioManager: audioManager
           });
         
 

@@ -40,6 +40,13 @@ export interface GameConfig {
       gameWonTextBackgroundTexture:string,
       gameWonTimeInfoBackground:string,
       font:string
+    },
+    audio:{
+      selectSound: string,
+      unselectSound: string,
+      button: string,
+      success: string,
+      fail: string
     }
   }
 
@@ -85,5 +92,12 @@ export const config: GameConfig = {
       gameWonTextBackgroundTexture: './GameWonPopupCircle.png',
       gameWonTimeInfoBackground: './StartPopupTextBackground.png',
       font: './Chango-Regular.ttf'
+    },
+    audio:{
+      selectSound:'./pop.mp3',
+      unselectSound: './uselect.mp3',
+      button: './button.mp3',
+      success: './success.mp3',
+      fail: './fail.mp3'
     }
   };

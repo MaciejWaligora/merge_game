@@ -11,6 +11,8 @@ export class ModelController<Tconfig extends ModelControllerConfig>{
     public tileClickedSignal = new Signal<{index:number, state: boolean}>();
     public tileDestroyedSignal = new Signal<number>();
     public gameWonSignal = new Signal();
+    public selectionClearedSignal = new Signal();
+
     constructor(config: Tconfig){
         this._config = config;
         config.gridModel.tileClickedSignal.addListener(this.onTileClicked, this);
@@ -53,6 +55,7 @@ export class ModelController<Tconfig extends ModelControllerConfig>{
             const symbol = selectedView.getSymbol();
             if(symbol !== tileToadd.symbol){
                 this.clearSelection();
+                this.selectionClearedSignal.emit();
                 return 
             }
         }

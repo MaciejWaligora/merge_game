@@ -25,7 +25,6 @@ function App() {
   return (
     <div className="App">
       {game ? <GameCanvas pixiApp={game.renderer} /> : <p>Loading...</p>}
-      {/* {<p>{`${window.innerWidth}x${window.innerHeight}`}</p>} */}
     </div>
   );
 }
