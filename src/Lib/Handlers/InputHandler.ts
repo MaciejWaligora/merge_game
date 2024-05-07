@@ -10,6 +10,10 @@ export class InputHandler{
         TileView.on('pointerdown', TileView.click);
     }
 
+    public static removeTilesClickHandler(TileView: TileView) {
+        TileView.interactive = false;
+    }
+
     public static attachButtonClickHandler(startButton: ButtonView<ButtonViewConfig>){
         startButton.interactive = true;
         startButton.on('pointerdown', startButton.clicked);

@@ -16,6 +16,7 @@ import { GameOverPopupModel } from './Lib/Models/GameOverPopupModel';
 import { StartPopupView } from './Lib/Views/StartPopupView';
 import { GameWonPopupView } from './Lib/Views/GameWonPopupView';
 import { GameOverPopupView } from './Lib/Views/GameOverPopupView';
+import { Scaler } from './Lib/Scaler';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -51,11 +52,8 @@ export class GameFactory {
             tileSpacing: config.grid.tilespacing
         });
 
-        const tileViews = gridView.getTileViews();
         gridView.addSymbols(symbolsForTheGame);
-        for(let tileView of tileViews){
-            InputHandler.attachTilesClickHandler(tileView);
-        }
+        
 
 
         const timerView = new TimerView({
@@ -132,6 +130,8 @@ export class GameFactory {
         
 
         gameController.init();
+
+        
 
         return {
             renderer: renderer,

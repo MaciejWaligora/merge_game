@@ -149,6 +149,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
 
     public onGameOverPopupOpen(){
         this._gameOverPopupViewController.show();
+        this._viewController.removeInputFromTiles();
     }
 
     public onGameOverPopupClose(){
@@ -159,11 +160,13 @@ export class GameController<Tconfig extends GameControllerConfig>{
         const time = this._timerModelController.stop();
         this._gameWonPopupViewController.update(time/100)
         this._gameWonPopupViewController.show();
+        this._viewController.removeInputFromTiles();
     }
 
     public onGameWonpopupClose(){}
 
     private _start(){
         this._timerModelController.start();
+        this._viewController.addInputToTiles();
     }
 }

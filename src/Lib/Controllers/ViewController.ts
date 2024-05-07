@@ -1,3 +1,4 @@
+import { InputHandler } from "../Handlers/InputHandler";
 import { Signal } from "../Signal";
 import { GridView} from "../Views/GridView";
 
@@ -28,5 +29,19 @@ export class ViewController <Tconfig extends ViewControllerConfig>{
 
     public destroyTile(index: number | undefined){
         this._config.gridView.destroyTile(index);
+    }
+
+    public removeInputFromTiles(){
+        const tileViews = this._config.gridView.getTileViews();
+        for(let tileView of tileViews){
+            InputHandler.removeTilesClickHandler(tileView);
+        }
+    }
+
+    public addInputToTiles(){
+        const tileViews = this._config.gridView.getTileViews();
+        for(let tileView of tileViews){
+            InputHandler.attachTilesClickHandler(tileView);
+        }
     }
 }
