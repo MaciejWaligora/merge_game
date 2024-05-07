@@ -83,6 +83,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._gameOverPopupModelController.closeSignal.addListener(this.onGameOverPopupClose, this);
         this._gameWonPopupModelController.openSignal.addListener(this.onGameWonPopupOpen, this);
         this._gameWonPopupModelController.closeSignal.addListener(this.onGameWonpopupClose, this);
+        this._gameWonPopupViewController.restartButtonSignal.addListener(this.onRestartButtonClicked, this);
         this._startPopupViewController.stratButtonClickedSignal.addListener(this.onStartButtonClicked, this);
         this._gameOverPopupViewController.restartButtonSignal.addListener(this.onRestartButtonClicked, this);
 
@@ -131,7 +132,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
     }
 
     public onRestartButtonClicked(){
-        console.log('restart clicked')
+        window.location.reload();
     }
 
     public onStartButtonClicked(){

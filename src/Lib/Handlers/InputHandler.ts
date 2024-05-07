@@ -5,12 +5,12 @@ import * as PIXI from 'pixijs'
 
 export class InputHandler{
 
-    public attachTilesClickHandler(TileView: TileView) {
+    public static attachTilesClickHandler(TileView: TileView) {
         TileView.interactive = true;
         TileView.on('pointerdown', TileView.click);
     }
 
-    public attachButtonClickHandler(startButton: ButtonView<ButtonViewConfig>){
+    public static attachButtonClickHandler(startButton: ButtonView<ButtonViewConfig>){
         startButton.interactive = true;
         startButton.on('pointerdown', startButton.clicked);
     }

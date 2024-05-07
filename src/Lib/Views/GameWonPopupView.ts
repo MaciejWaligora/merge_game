@@ -1,8 +1,12 @@
+import { Signal } from "../Signal";
+import { ButtonView, ButtonViewConfig } from "./ButtonView";
 import { PopupView, PopupViewConfig } from "./PopupView";
 import * as PIXI from 'pixijs'
 
 export interface GameWonPopupViewConfig extends PopupViewConfig{
     timeInfoBackground: PIXI.Texture;
+    buttonTexture: PIXI.Texture;
+    buttonTextTexture: PIXI.Texture;
     font: string
 }
 
@@ -11,6 +15,9 @@ export class GameWonPopupView<Tconfig extends GameWonPopupViewConfig> extends Po
     private _timeInfoBackground: PIXI.Sprite;
     private _timeDisplay: PIXI.Text;
     private _timeInfoContainer: PIXI.Container;
+    private _buttonContainer: ButtonView<ButtonViewConfig>;
+
+    public restartButtonSignal = new Signal();
 
     constructor(config: Tconfig){
         super(config);
@@ -27,9 +34,12 @@ export class GameWonPopupView<Tconfig extends GameWonPopupViewConfig> extends Po
         this._timeInfoContainer.addChild(this._timeInfoBackground);
         this._timeInfoContainer.addChild(this._timeDisplay);
         this.addChild(this._timeInfoContainer);
-       
         this._place();
+        this._buttonContainer = new ButtonView(config);
+        this.addChild(this._buttonContainer);
+        this._placeButton();
         this._adjustTextDisplay()
+        this._buttonContainer.clickedSignal.addListener(this.onButtonClicked, this);
         
     }
 
@@ -52,6 +62,20 @@ export class GameWonPopupView<Tconfig extends GameWonPopupViewConfig> extends Po
     }
 
 
+    private _placeButton(){
+        const screenWidth = this._renderer.screen.width;
+
+        this._buttonContainer.y = this._timeInfoContainer.y + 320;
+        this._buttonContainer.x = (screenWidth -  this._buttonContainer.width)/2; 
+    }
+
+    public onButtonClicked(){
+        this.restartButtonSignal.emit();
+    }
+
+    public getButton(){
+        return this._buttonContainer
+    }
 
     public update(data?: number): void {
         this._timeDisplay.text = `Your time is: ${data}s`
