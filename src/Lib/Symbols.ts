@@ -3,12 +3,12 @@ type SymbolMapType = {
 };
 
 export const SymbolMap: SymbolMapType = {
-    diamond: "./diamond.png",
-    circle: "./circle.png",
-    triangle: "./triangle.png",
-    square: "./square.png",
-    star: "./star.png",
-    heart: "./heart.png"
+    diamond: "./Graphics/diamond.png",
+    circle: "./Graphics/circle.png",
+    triangle: "./Graphics/triangle.png",
+    square: "./Graphics/square.png",
+    star: "./Graphics/star.png",
+    heart: "./Graphics/heart.png"
 }
 
 export const Symbols = Object.keys(SymbolMap)
