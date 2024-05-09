@@ -84,8 +84,12 @@ export class GridView extends View<GridViewConfig>{
 
     public destroyTile(index: number | undefined){
         if(index !== undefined){
-            this._tileViews[index].destroy();
+            this._tileViews[index].hide();
         }  
+    }
+
+    public getTileView(index: number){
+        return this.getTileViews()[index];
     }
 
 

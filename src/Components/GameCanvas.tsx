@@ -2,11 +2,11 @@ import { Component, ReactNode, createRef } from "react";
 import * as PIXI from "pixijs"
 
 
-export interface GameCanvasConfig{
+export interface GameCanvasConfig {
     pixiApp: PIXI.Application;
 }
 
-export class GameCanvas extends Component <GameCanvasConfig> {
+export class GameCanvas extends Component<GameCanvasConfig> {
 
     private _parentRef = createRef<HTMLDivElement>();
 
@@ -19,13 +19,13 @@ export class GameCanvas extends Component <GameCanvasConfig> {
         this.props.pixiApp.destroy();
     }
 
-    private _loadView(){
+    private _loadView() {
         if (this._parentRef.current) {
             this._parentRef.current.appendChild(this.props.pixiApp.view as HTMLCanvasElement);
         }
     }
 
-    public render(): ReactNode{
+    public render(): ReactNode {
         return <div ref={this._parentRef}></div>
     }
 }

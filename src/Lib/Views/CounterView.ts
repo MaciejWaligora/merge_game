@@ -84,6 +84,10 @@ export class CounterView extends View<CounterViewConfig>{
         }
     }
 
+    public getCounterPos(){
+        return {x: this._counterTileSprite.x + this._counterTileSprite.width/2, y: this._counterTileSprite.y - this._counterTileSprite.height}
+    }
+
 
     public update(): void {
         
