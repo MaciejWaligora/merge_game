@@ -22,6 +22,7 @@ export class TileDestroyAnimation<Tconfig extends TileDestroyAnimationConfig> ex
     }
 
     protected _onAnimationFinished(): void {
+        super._onAnimationFinished();
         this._target.hide();
     }
 

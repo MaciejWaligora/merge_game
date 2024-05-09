@@ -23,7 +23,6 @@ export class GridView extends View<GridViewConfig>{
     constructor(config: GridViewConfig){
         super(config);
         this._config = config;
-        this._renderer.stage.addChild(this);
         this._layoutGrid();
         this.centerGrid();
     }

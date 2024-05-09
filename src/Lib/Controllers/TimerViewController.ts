@@ -17,4 +17,12 @@ export class TimerViewController<Tconfig extends TimerViewControllerConfig>{
     public setProgress(progress:number){
         this._config.timerView.setProgress(progress);
     }
+
+    public show(){
+        this._config.timerView.show();
+    }
+
+    public getTimer(){
+        return this._config.timerView
+    }
 }

@@ -1,5 +1,6 @@
 import * as PIXI from 'pixijs'
 import { View, ViewConfig } from '../Views/View';
+import { Signal } from '../Signal';
 
 export type AnimationCallback = (delta: number) => void;
 
@@ -10,7 +11,7 @@ export interface AnimationConfig{
 }
 
 export class Animation<Tconfig extends AnimationConfig>{
-
+    public onFinishedAnimationSignal = new Signal();
     protected _duration: number;
     protected  _easingFunction: (progress: number) => number;
     protected  _target: View<ViewConfig>;
@@ -44,7 +45,9 @@ export class Animation<Tconfig extends AnimationConfig>{
 
     }
 
-    protected _onAnimationFinished(): void{}
+    protected _onAnimationFinished(): void{
+        this.onFinishedAnimationSignal.emit();
+    }
 
 
     isFinished(): boolean {

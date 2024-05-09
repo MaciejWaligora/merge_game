@@ -69,7 +69,7 @@ export class GameFactory {
             background: textures.timerTextures[0], 
             progressBar: textures.timerTextures[1]
         })
-        timerView.show();
+        // timerView.show();
 
 
         const counterView = new CounterView({
@@ -79,7 +79,7 @@ export class GameFactory {
             counterTile: textures.counterTextures[2],
             counterFont: 'Chango Regular'
         })
-        counterView.show();
+        // counterView.show();
 
         const startPopupView = new StartPopupView({
             renderer: renderer,
@@ -90,7 +90,7 @@ export class GameFactory {
             buttonTextTexture: textures.startPopupTexture[4]
         });
 
-        startPopupView.show();
+        // startPopupView.show();
         const startbutton = startPopupView.getButton();
         InputHandler.attachButtonClickHandler(startbutton);
 

@@ -31,8 +31,6 @@ export class CounterView extends View<CounterViewConfig>{
         this.addChild(this._counterLabelSprite);
         this.addChild(this._counterTileSprite);
         this.addChild(this._counterDisplay);
-        this._placeChildrenRelatively();
-        this._placeAboveGrid();
     }
 
     private _placeChildrenRelatively(){
@@ -88,6 +86,15 @@ export class CounterView extends View<CounterViewConfig>{
         return {x: this._counterTileSprite.x + this._counterTileSprite.width/2, y: this._counterTileSprite.y - this._counterTileSprite.height}
     }
 
+    public getCounterNumber(){
+        return this._counterTileSprite;
+    }
+
+    public show(){
+        super.show();
+        this._placeChildrenRelatively();
+        this._placeAboveGrid();
+    }
 
     public update(): void {
         

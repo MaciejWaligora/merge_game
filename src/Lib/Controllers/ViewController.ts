@@ -37,6 +37,14 @@ export class ViewController <Tconfig extends ViewControllerConfig>{
         }
     }
 
+    public getGrid(){
+        return this._config.gridView;
+    }
+
+    public show(){
+        this._config.gridView.show();
+    }
+
     public removeInputFromTiles(){
         const tileViews = this._config.gridView.getTileViews();
         for(let tileView of tileViews){

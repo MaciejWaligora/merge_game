@@ -31,4 +31,8 @@ export class GameWonPopupViewController<Tconfig extends GameWonPopupViewControll
         this.restartButtonSignal.emit();
     }
 
+    public getPopup(){
+        return this._config.gameWonPopupView
+    }
+
 }

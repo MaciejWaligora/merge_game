@@ -19,4 +19,16 @@ export class CounterViewController<Tconfig extends CounterViewControllerConfig>{
     public getCounterViewPos(){
         return this._config.counterView.getCounterPos();
     }
+
+    public getCounterView(){
+        return this._config.counterView;
+    }
+
+    public getNumberView(){
+        return this._config.counterView.getCounterNumber();
+    }
+
+    public show(){
+        this._config.counterView.show();
+    }
 }

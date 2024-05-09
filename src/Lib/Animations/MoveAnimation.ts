@@ -6,9 +6,9 @@ export interface MoveAnimationConfig extends AnimationConfig{
 }
 
 export class MoveAnimation<Tconfig extends MoveAnimationConfig> extends Animation<MoveAnimationConfig> {
-    private startPosition: PIXI.Point;
-    private endPosition: PIXI.Point;
-    private speed: number;
+    protected startPosition: PIXI.Point;
+    protected endPosition: PIXI.Point;
+    protected speed: number;
 
     constructor(config:Tconfig){
         super(config);
