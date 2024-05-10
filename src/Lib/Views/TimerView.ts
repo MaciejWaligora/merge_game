@@ -15,7 +15,6 @@ export class TimerView extends View<TimerViewConfig> {
 
     constructor(config: TimerViewConfig) {
         super(config);
-        this._renderer.stage.addChild(this);
         this._backgroundSprite = new PIXI.Sprite(config.background);
         this._progressBarSprite = new PIXI.Sprite(config.progressBar);
         this.addBackground();
@@ -65,6 +64,11 @@ export class TimerView extends View<TimerViewConfig> {
         const progressWidth = map(progress, 0, 100, 0, max);
 
         this._progressBarSprite.width = progressWidth;
+    }
+
+    public show(): void {
+        super.show();
+        this.place(); 
     }
 
     public update(): void {

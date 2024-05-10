@@ -18,6 +18,7 @@ import { GameWonPopupView } from './Lib/Views/GameWonPopupView';
 import { GameOverPopupView } from './Lib/Views/GameOverPopupView';
 import { Scaler } from './Lib/Scaler';
 import { AudioManager } from './Lib/AudioManager';
+import { AnimationManager } from './Lib/AnimationManager';
 
 export interface Game{
     renderer: PIXI.Application,
@@ -46,6 +47,12 @@ export class GameFactory {
         const symbolsForTheGame = SymbolGenerator.generateSymbols(config.grid.size);
         const models = await GameFactory.loadModels(config, symbolsForTheGame);
         const audioManager = new AudioManager(config.audio);
+        const animationManager = new AnimationManager();
+        renderer.ticker.add(delta => {
+            animationManager.update(delta);
+            animationManager.flushFinishedAnimations();
+        });
+
         const gridView = new GridView({
             tileTextures:{textureUnclicked: textures.tileTextures[0], textureClicked: textures.tileTextures[1]},
             size: config.grid.size, 
@@ -62,7 +69,7 @@ export class GameFactory {
             background: textures.timerTextures[0], 
             progressBar: textures.timerTextures[1]
         })
-        timerView.show();
+        // timerView.show();
 
 
         const counterView = new CounterView({
@@ -72,7 +79,7 @@ export class GameFactory {
             counterTile: textures.counterTextures[2],
             counterFont: 'Chango Regular'
         })
-        counterView.show();
+        // counterView.show();
 
         const startPopupView = new StartPopupView({
             renderer: renderer,
@@ -83,7 +90,7 @@ export class GameFactory {
             buttonTextTexture: textures.startPopupTexture[4]
         });
 
-        startPopupView.show();
+        // startPopupView.show();
         const startbutton = startPopupView.getButton();
         InputHandler.attachButtonClickHandler(startbutton);
 
@@ -127,7 +134,8 @@ export class GameFactory {
             startPopupView: startPopupView,
             gameWonPopupView: gameWonPopupView,
             gameOverPopupView: gameOverPopupView,
-            audioManager: audioManager
+            audioManager: audioManager,
+            animationManager: animationManager
           });
         
 

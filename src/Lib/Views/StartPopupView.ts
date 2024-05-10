@@ -36,6 +36,7 @@ export class StartPopupView<Tconfig extends StartPopupViewConfig> extends PopupV
        
     }
 
+
     public getButton(){
         return this._buttonContainer
     }

@@ -16,10 +16,12 @@ export abstract class View<Tconfig extends ViewConfig> extends PIXI.Container{
 
     public show(){
         this._renderer.stage.addChild(this);
+        this.alpha = 1;
     }
 
     public hide(){
         this._renderer.stage.removeChild(this);
+        this.alpha = 0;
     }
 
 

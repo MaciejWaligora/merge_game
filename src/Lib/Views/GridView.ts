@@ -23,7 +23,6 @@ export class GridView extends View<GridViewConfig>{
     constructor(config: GridViewConfig){
         super(config);
         this._config = config;
-        this._renderer.stage.addChild(this);
         this._layoutGrid();
         this.centerGrid();
     }
@@ -84,8 +83,12 @@ export class GridView extends View<GridViewConfig>{
 
     public destroyTile(index: number | undefined){
         if(index !== undefined){
-            this._tileViews[index].destroy();
+            this._tileViews[index].hide();
         }  
+    }
+
+    public getTileView(index: number){
+        return this.getTileViews()[index];
     }
 
 

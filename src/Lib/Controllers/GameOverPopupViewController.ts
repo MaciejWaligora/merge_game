@@ -26,4 +26,8 @@ export class GameOverPopupViewController<Tconfig extends GameOverPopupViewContro
     public onRestartButtonClicked(){
         this.restartButtonSignal.emit();
     }
+
+    public getPopup(){
+        return this._config.gameOverPopupView;
+    }
 }

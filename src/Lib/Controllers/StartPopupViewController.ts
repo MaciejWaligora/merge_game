@@ -26,4 +26,8 @@ export class StartPopupViewController<Tconfig extends StartPopupViewControllerCo
     public hide(){
         this._config.startPopupView.hide();
     }
+
+    public getPopup(){
+        return this._config.startPopupView;
+    }
 }

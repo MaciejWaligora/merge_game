@@ -62,42 +62,42 @@ export const config: GameConfig = {
       tilespacing: 10,
     },
     assets: {
-      background: './background.png',
-      tile: './tile.png',
-      clickedTile: './clickedTile.png',
+      background: './Graphics/background.png',
+      tile: './Graphics/tile.png',
+      clickedTile: './Graphics/clickedTile.png',
     },
     timer:{
         timelimit: 3000,
         progressBarHeight: 20,
         timerbackgroundcolor: 0xffffff,
-        background:'./timer-background.png',
-        bar:'./timer-bar.png'
+        background:'./Graphics/timer-background.png',
+        bar:'./Graphics/timer-bar.png'
     },
     counter:{
-        counterHandle: './counter-handle.png',
-        counterLabel: './counter-label.png',
-        counterTile: './counter-tile.png',
+        counterHandle: './Graphics/counter-handle.png',
+        counterLabel: './Graphics/counter-label.png',
+        counterTile: './Graphics/counter-tile.png',
         font: './Chango-Regular.ttf'
     },
     popups:{
-      backgroundtexture: './PopupBackground.png',
-      popupButtonTexture: './PopupButton.png',
-      gameOverPopupTextBackgroundTexture: './GameOverPopUpCircle.png',
-      gameOverPopupButtonText: './GameOverPopupButtonText.png',
-      gameOverPopupText: './GameOverPopupText.png',
-      startPopupTextBackgroundTexture: './StartPopupTextBackground.png',
-      startPopupButtonTextTexture:'./StartPopupButtonText.png',
-      startPopupTextTexture: './StartPopupText.png',
-      gameWonTextTexture: './GameWonText.png',
-      gameWonTextBackgroundTexture: './GameWonPopupCircle.png',
-      gameWonTimeInfoBackground: './StartPopupTextBackground.png',
+      backgroundtexture: './Graphics/PopupBackground.png',
+      popupButtonTexture: './Graphics/PopupButton.png',
+      gameOverPopupTextBackgroundTexture: './Graphics/GameOverPopUpCircle.png',
+      gameOverPopupButtonText: './Graphics/GameOverPopupButtonText.png',
+      gameOverPopupText: './Graphics/GameOverPopupText.png',
+      startPopupTextBackgroundTexture: './Graphics/StartPopupTextBackground.png',
+      startPopupButtonTextTexture:'./Graphics/StartPopupButtonText.png',
+      startPopupTextTexture: './Graphics/StartPopupText.png',
+      gameWonTextTexture: './Graphics/GameWonText.png',
+      gameWonTextBackgroundTexture: './Graphics/GameWonPopupCircle.png',
+      gameWonTimeInfoBackground: './Graphics/StartPopupTextBackground.png',
       font: './Chango-Regular.ttf'
     },
     audio:{
-      selectSound:'./pop.mp3',
-      unselectSound: './uselect.mp3',
-      button: './button.mp3',
-      success: './success.mp3',
-      fail: './fail.mp3'
+      selectSound:'./Audio/pop.mp3',
+      unselectSound: './Audio/uselect.mp3',
+      button: './Audio/button.mp3',
+      success: './Audio/success.mp3',
+      fail: './Audio/fail.mp3'
     }
   };

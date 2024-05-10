@@ -1,3 +1,4 @@
+import { AnimationManager } from "../AnimationManager";
 import { AudioManager, AudioManagerConfig } from "../AudioManager";
 import { InputHandler } from "../Handlers/InputHandler";
 import { CounterModel } from "../Models/CounterModel";
@@ -12,6 +13,7 @@ import { GameWonPopupView, GameWonPopupViewConfig } from "../Views/GameWonPopupV
 import { GridView} from "../Views/GridView";
 import { StartPopupView, StartPopupViewConfig } from "../Views/StartPopupView";
 import { TimerView } from "../Views/TimerView";
+import { View, ViewConfig } from "../Views/View";
 import { CounterModelController, CounterModelControllerConfig } from "./CounterModelController";
 import { CounterViewController, CounterViewControllerConfig } from "./CounterViewController";
 import { GameOverPopupViewController, GameOverPopupViewControllerConfig } from "./GameOverPopupViewController";
@@ -24,6 +26,7 @@ import { StartPopupViewController, StartPopupViewControllerConfig } from "./Star
 import { TimerModelController, TimerModelControllerConfig } from "./TimerModelController";
 import { TimerViewController, TimerViewControllerConfig } from "./TimerViewController";
 import { ViewController, ViewControllerConfig } from "./ViewController";
+import * as PIXI from 'pixijs'
 
 export interface GameControllerConfig{
     gridModel: GridModel<GridModelConfig>;
@@ -39,6 +42,8 @@ export interface GameControllerConfig{
     gameWonPopupView: GameWonPopupView<GameWonPopupViewConfig>;
     gameOverPopupView: GameOverPopupView<GameOverPopupViewConfig>;
     audioManager: AudioManager<AudioManagerConfig>;
+    animationManager: AnimationManager;
+
 }
 
 export class GameController<Tconfig extends GameControllerConfig>{
@@ -56,6 +61,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
     private _gameWonPopupViewController: GameWonPopupViewController<GameWonPopupViewControllerConfig>;
     private _gameOverPopupViewController: GameOverPopupViewController<GameOverPopupViewControllerConfig>;
     private _audioManager: AudioManager<AudioManagerConfig>;
+    private _animationManager: AnimationManager;
 
     private _inputHandler: InputHandler;
 
@@ -75,6 +81,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._inputHandler = new InputHandler();
 
         this._audioManager =  config.audioManager;
+        this._animationManager = config.animationManager;
 
         this._modelController.tileClickedSignal.addListener(this.updateView, this);
         this._modelController.tileDestroyedSignal.addListener(this.destroyTile, this);
@@ -93,11 +100,13 @@ export class GameController<Tconfig extends GameControllerConfig>{
         this._startPopupViewController.stratButtonClickedSignal.addListener(this.onStartButtonClicked, this);
         this._gameOverPopupViewController.restartButtonSignal.addListener(this.onRestartButtonClicked, this);
 
-        this._startPopupModelController.show();
+        
     }
 
     public init(){
         this._viewController.tileClickedSignal.addListener(this.updateModel, this);
+        this._startPopupModelController.show();
+        
     }
 
     public updateModel(index: number | undefined){
@@ -110,6 +119,8 @@ export class GameController<Tconfig extends GameControllerConfig>{
         if(data){
             this._viewController.updateView(data.index, data.state);
             if(data.state){
+                const target = this._viewController.getTile(data.index) as View<ViewConfig>;
+                this._animationManager.playPopAnimation(target , 10, 1.1);
                 this._audioManager.playSelectSound();
             }
         }  
@@ -120,8 +131,11 @@ export class GameController<Tconfig extends GameControllerConfig>{
     }
 
     public destroyTile(index: number | undefined){
-        this._viewController.destroyTile(index);
+        const target = this._viewController.getTile(index) as View<ViewConfig>;
+        const counterViewPos = this._counterViewController.getCounterViewPos();
+        this._animationManager.playTileDestoryAnimation(target, 30, counterViewPos);
         this._counterModelController.increaseCount();
+        
     }
 
     public onTimerTick(progress: number | undefined){
@@ -158,15 +172,23 @@ export class GameController<Tconfig extends GameControllerConfig>{
     }
 
     public onStartPopupOpen(){
+        this._startPopupViewController.show();
+        this._animationManager.playSlideInAnimation(this._startPopupViewController.getPopup(), 100);
     }
 
     public onStartPopupClose(){
-        this._start();
         this._startPopupViewController.hide();
+        this._viewController.show()
+        this._counterViewController.show();
+        this._timerViewController.show();
+        this._animationManager.playSlideInAnimation(this._viewController.getGrid(), 100);
+        this._animationManager.playSlideInAnimation(this._counterViewController.getCounterView(), 100);
+        this._animationManager.playSlideInAnimation(this._timerViewController.getTimer(), 100, ()=>{this._start()}, this);
     }
 
     public onGameOverPopupOpen(){
         this._gameOverPopupViewController.show();
+        this._animationManager.playSlideInAnimation(this._gameOverPopupViewController.getPopup(), 100);
         this._viewController.removeInputFromTiles();
     }
 
@@ -178,6 +200,7 @@ export class GameController<Tconfig extends GameControllerConfig>{
         const time = this._timerModelController.stop();
         this._gameWonPopupViewController.update(time/100)
         this._gameWonPopupViewController.show();
+        this._animationManager.playSlideInAnimation(this._gameWonPopupViewController.getPopup(), 100);
         this._viewController.removeInputFromTiles();
     }
 
